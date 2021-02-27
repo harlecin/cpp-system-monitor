@@ -1,5 +1,6 @@
+# Use .PHONY if your make command is not targeting a specific file
 .PHONY: all
-all: format test build
+all: format build
 
 .PHONY: format
 format:
