@@ -10,6 +10,27 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+int GetValueFromKeyValuePair(string key, std::ifstream stream) {
+  string key_map;
+  int value;
+  string line;
+  
+  if (stream.is_open()) {
+      std::getline(stream, line);
+      std::istringstream linestream(line);
+      // pull of the tokens from linestream:
+      while (std::getline(stream, line)) {
+        std::istringstream linestream(line);
+        while (linestream >> key_map >> value) {
+          if (key_map == key) {
+            return value;
+          }
+        }
+      }
+    }
+    return value;
+}
+
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
@@ -93,7 +114,29 @@ vector<string> LinuxParser::CpuUtilization() { return {}; }
 int LinuxParser::TotalProcesses() { return 0; }
 
 // TODO: Read and return the number of running processes
-int LinuxParser::RunningProcesses() { return 0; }
+int LinuxParser::RunningProcesses() { 
+  string key;
+  int value;
+  string line;
+
+  //For each line, check if the first word == "procs_running"
+  //    TRUE: return process number
+  std::ifstream stream(kProcDirectory + kStatFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    // pull of the tokens from linestream:
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+        if (key == "procs_running") {
+          return value;
+        }
+      }
+    }
+  }
+  return value;
+}
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
