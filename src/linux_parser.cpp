@@ -90,9 +90,31 @@ long LinuxParser::IdleJiffies() { return 0; }
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // TODO: Read and return the total number of processes
-int LinuxParser::TotalProcesses() { return 0; }
+int LinuxParser::TotalProcesses() { 
+    string key;
+    int value;
+    string line;
 
-// TODO: Read and return the number of running processes
+    //For each line, check if the first word == "procs_running"
+    //    TRUE: return process number
+    std::ifstream stream(kProcDirectory + kStatFilename);
+    if (stream.is_open()) {
+      std::getline(stream, line);
+      std::istringstream linestream(line);
+      // pull of the tokens from linestream:
+      while (std::getline(stream, line)) {
+        std::istringstream linestream(line);
+        while (linestream >> key >> value) {
+          if (key == "processes") {
+            return value;
+          }
+        }
+      }
+    }
+    return value; 
+
+}
+
 int LinuxParser::RunningProcesses() { 
   string key;
   int value;
@@ -138,3 +160,4 @@ string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
 long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
 
 // TODO: refactor key value parsing into template function?
+// TODO: refactor RunningProcesses() and TotalProcesses()!
