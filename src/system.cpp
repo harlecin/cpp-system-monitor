@@ -17,8 +17,9 @@ using std::vector;
 // We poll infos that do not change only once when we initialize the class
 // and afterwards return the infos from class member variables
 System::System(): 
-    kernel_(LinuxParser::Kernel())
-    ,os_(LinuxParser::OperatingSystem()) {}
+    os_(LinuxParser::OperatingSystem())
+    ,kernel_(LinuxParser::Kernel()) 
+    {}
 
 // TODO: Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
