@@ -10,27 +10,6 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-int GetValueFromKeyValuePair(string key, std::ifstream stream) {
-  string key_map;
-  int value;
-  string line;
-  
-  if (stream.is_open()) {
-      std::getline(stream, line);
-      std::istringstream linestream(line);
-      // pull of the tokens from linestream:
-      while (std::getline(stream, line)) {
-        std::istringstream linestream(line);
-        while (linestream >> key_map >> value) {
-          if (key_map == key) {
-            return value;
-          }
-        }
-      }
-    }
-    return value;
-}
-
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
@@ -157,3 +136,5 @@ string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+
+// TODO: refactor key value parsing into template function?
