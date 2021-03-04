@@ -67,10 +67,32 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() { 
+    long free_memory = 0;
+    long total_memory = 0;
+    string key; 
+    long value;
+    string line;
 
-// TODO: Read and return the system uptime
+    std::ifstream stream(kProcDirectory + kMeminfoFilename);
+    if (stream.is_open()) {
+      while (std::getline(stream, line)) {
+        std::istringstream linestream(line);
+        linestream >> key >> value;
+          if (key == "MemTotal:") {
+            total_memory = value;
+          }
+          if (key == "MemFree:") {
+            free_memory = value;
+          }
+      }
+    }
+
+  long used_mem = total_memory - free_memory;
+  float mem_util = (used_mem*1.0)/(total_memory*1.0); 
+  return mem_util;
+}
+
 long LinuxParser::UpTime() { 
     long total_uptime;
     string line;
@@ -131,7 +153,7 @@ int LinuxParser::RunningProcesses() {
   string key;
   int value;
   string line;
-
+  //TODO: refactor! is the second while even necessary?
   //For each line, check if the first word == "procs_running"
   //    TRUE: return process number
   std::ifstream stream(kProcDirectory + kStatFilename);
