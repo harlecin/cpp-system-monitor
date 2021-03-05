@@ -119,7 +119,6 @@ long LinuxParser::ActiveJiffies() { return 0; }
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
 
-// TODO: Read and return CPU utilization
 vector<long> LinuxParser::CpuUtilization() { 
   string key;
   string cpu_name;
@@ -190,27 +189,86 @@ int LinuxParser::RunningProcesses() {
   return value;
 }
 
-// TODO: Read and return the command associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Command(int pid) { 
+  string line;
+  string command;
+  std::ifstream stream(kProcDirectory + std::to_string(pid) + "/" + kCmdlineFilename);
 
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    linestream >> command;
 
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid[[maybe_unused]]) { return string(); }
+  }
+  return command;
+}
 
-// TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Ram(int pid) { 
+  string key; 
+  long value;
+  string line;
+
+  std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatusFilename);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      linestream >> key >> value;
+        if (key == "VmSize:") {
+          return std::to_string(value/1000);
+        }
+    }
+  }
+  return "unknown-ram";
+  }
+
+string LinuxParser::Uid(int pid) { 
+    string key; 
+    string value = "";
+    string line;
+
+    std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatusFilename);
+    if (stream.is_open()) {
+      while (std::getline(stream, line)) {
+        std::replace(line.begin(), line.end(), ':', ' ');
+        std::istringstream linestream(line);
+        linestream >> key >> value;
+          if (key == "Uid:") {
+            return value;
+          }
+      }
+    }
+    return value;
+}
+
+string LinuxParser::User(int pid) { 
+  string uid = Uid(pid);
+  string user; 
+  string value;
+  string filler;  
+  string line;
+
+  std::ifstream stream(kPasswordPath);
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream linestream(line);
+      linestream >> user >> filler >> value;
+        if (value == uid) {
+          return user;
+        }
+    }
+  }
+  return "unknown-user";
+}
+
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
 
+
+
+
 // TODO: refactor key value parsing into template function?
 // TODO: refactor RunningProcesses() and TotalProcesses()!
 // TODO: how does stringstream work exactly?
-//    Why does udacity use while while structure?
