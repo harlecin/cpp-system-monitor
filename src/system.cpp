@@ -21,7 +21,6 @@ System::System():
     ,kernel_(LinuxParser::Kernel()) 
     {}
 
-// TODO: Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
