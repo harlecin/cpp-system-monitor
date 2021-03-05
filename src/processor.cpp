@@ -4,8 +4,6 @@
 #include<unistd.h>
 
 float Processor::Utilization() { 
-    std::vector<long> CpuPrev = LinuxParser::CpuUtilization();
-    sleep(1);
     std::vector<long> Cpu = LinuxParser::CpuUtilization();
 
     // Source CPU Utilization calc: https://stackoverflow.com/a/23376195
