@@ -257,34 +257,29 @@ std::vector<long> LinuxParser::StatParser(int pid) {
   if (filestream.is_open()) {
     std::getline(filestream, line);
     std::istringstream linestream(line);
-    int counter = 1;
+    int i = 1;
     while (linestream >> value) {
-      if (counter == 14) {
+      if (i == 14) {
         stats.push_back(std::stoi(value));
       }
-      if (counter == 15) {
+      if (i == 15) {
         stats.push_back(std::stoi(value));
       }
-      if (counter == 16) {
+      if (i == 16) {
         stats.push_back(std::stoi(value));
       }
-      if (counter == 17) {
+      if (i == 17) {
         stats.push_back(std::stoi(value));
       }
       // Time process started after system boot:
-      if (counter == 22) {
+      if (i == 22) {
         stats.push_back(std::stoi(value));
       }
-      counter++;
+      i++;
     }
   }
   return stats;
 }
-// TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid) { 
-  return 0; 
-  }
 
 
 

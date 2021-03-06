@@ -18,8 +18,13 @@ using std::vector;
 // and afterwards return the infos from class member variables
 System::System(): 
     os_(LinuxParser::OperatingSystem())
-    ,kernel_(LinuxParser::Kernel()) 
-    {}
+    ,kernel_(LinuxParser::Kernel())
+    {
+        vector<int> pids = LinuxParser::Pids();
+        for (int pid: pids) {
+            processes_.push_back(Process(pid));
+        }
+    }
 
 Processor& System::Cpu() { return cpu_; }
 
