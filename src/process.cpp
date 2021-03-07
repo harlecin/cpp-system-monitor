@@ -24,9 +24,9 @@ int Process::Pid() { return pid_; }
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() { 
     // Source calc: https://stackoverflow.com/a/16736599
+    long uptime = LinuxParser::UpTime();
     std::vector<long> stats = LinuxParser::StatParser(pid_);
     //TODO: Should I fetch system uptime from the system class instead?
-    long uptime = LinuxParser::UpTime();
     long utime = stats[0];
     long stime = stats[1];
     long cutime = stats[2];
@@ -35,20 +35,20 @@ float Process::CpuUtilization() {
 
     // total time including child processes
     float total_time = utime + stime + cutime + cstime;
-    float seconds = uptime - (starttime / sysconf(_SC_CLK_TCK));
+    long process_uptime = uptime - (starttime / sysconf(_SC_CLK_TCK));
 
-    float cpu_util = 100 * ((total_time / sysconf(_SC_CLK_TCK)) / seconds);
+    float cpu_util =  ((total_time / sysconf(_SC_CLK_TCK)) / process_uptime);
     return cpu_util;
 }
 
 // TODO: Return the command that generated this process
-string Process::Command() { return LinuxParser::Command(pid_); }
+string Process::Command() { return command_; }
 
 // TODO: Return this process's memory utilization
 string Process::Ram() { return LinuxParser::Ram(pid_); }
 
 // TODO: Return the user (name) that generated this process
-string Process::User() { return LinuxParser::User(pid_); }
+string Process::User() { return user_; }
 
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { 
@@ -60,6 +60,6 @@ long int Process::UpTime() {
     return uptime_sec;
 }
 
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
+bool Process::operator<(Process a)  {
+  return this->CpuUtilization() > a.CpuUtilization();
+}
