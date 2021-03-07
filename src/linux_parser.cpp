@@ -239,13 +239,15 @@ string LinuxParser::User(int pid) {
     while (std::getline(stream, line)) {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream linestream(line);
-      linestream >> user >> filler >> value;
+    
+      while(linestream >> user >> filler >> value) {
         if (value == uid) {
           return user;
-        }
+          }
+      }
     }
   }
-  return "unknown-user";
+  return "NA";
 }
 
 std::vector<long> LinuxParser::StatParser(int pid) {
@@ -280,8 +282,6 @@ std::vector<long> LinuxParser::StatParser(int pid) {
   }
   return stats;
 }
-
-
 
 
 // TODO: refactor key value parsing into template function?
