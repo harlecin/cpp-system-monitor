@@ -52,9 +52,10 @@ string Process::User() { return LinuxParser::User(pid_); }
 
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { 
+    long sys_uptime = LinuxParser::UpTime();
     std::vector<long> stats = LinuxParser::StatParser(pid_);
-    long uptime_clock_ticks = stats[4];
-    long uptime_sec = (uptime_clock_ticks)/sysconf(_SC_CLK_TCK);
+    long start_clock_ticks = stats[0] + stats[1] + stats[2] + stats[3];
+    long uptime_sec = sys_uptime - (start_clock_ticks)/sysconf(_SC_CLK_TCK);
 
     return uptime_sec;
 }
