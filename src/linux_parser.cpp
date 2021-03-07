@@ -216,7 +216,6 @@ string LinuxParser::Uid(int pid) {
     std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatusFilename);
     if (stream.is_open()) {
       while (std::getline(stream, line)) {
-
         std::istringstream linestream(line);
         linestream >> key >> value;
           if (key == "Uid:") {
