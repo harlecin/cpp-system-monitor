@@ -210,13 +210,13 @@ string LinuxParser::Ram(int pid) {
 
 string LinuxParser::Uid(int pid) { 
     string key; 
-    string value = "";
+    string value;
     string line;
 
     std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatusFilename);
     if (stream.is_open()) {
       while (std::getline(stream, line)) {
-        std::replace(line.begin(), line.end(), ':', ' ');
+
         std::istringstream linestream(line);
         linestream >> key >> value;
           if (key == "Uid:") {
@@ -224,7 +224,7 @@ string LinuxParser::Uid(int pid) {
           }
       }
     }
-    return value;
+    return "unkown";
 }
 
 string LinuxParser::User(int pid) { 
@@ -247,7 +247,7 @@ string LinuxParser::User(int pid) {
       }
     }
   }
-  return "NA";
+  return "unknown";
 }
 
 std::vector<long> LinuxParser::StatParser(int pid) {
