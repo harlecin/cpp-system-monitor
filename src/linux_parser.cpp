@@ -156,9 +156,7 @@ int LinuxParser::RunningProcesses() {
   string key;
   int value;
   string line;
-  //TODO: refactor! is the second while even necessary?
-  //For each line, check if the first word == "procs_running"
-  //    TRUE: return process number
+
   std::ifstream stream(kProcDirectory + kStatFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
@@ -283,6 +281,5 @@ std::vector<long> LinuxParser::StatParser(int pid) {
 }
 
 
-// TODO: refactor key value parsing into template function?
+// TODO: refactor key value parsing function?
 // TODO: refactor RunningProcesses() and TotalProcesses()!
-// TODO: how does stringstream work exactly?
