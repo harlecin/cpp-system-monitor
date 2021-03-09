@@ -1,6 +1,4 @@
-#ifndef NCURSES_DISPLAY_H
-#define NCURSES_DISPLAY_H
-
+#pragma once
 #include <curses.h>
 
 #include "process.h"
@@ -12,5 +10,3 @@ void DisplaySystem(System& system, WINDOW* window);
 void DisplayProcesses(std::vector<Process>& processes, WINDOW* window, int n);
 std::string ProgressBar(float percent);
 };  // namespace NCursesDisplay
-
-#endif

@@ -1,9 +1,10 @@
-#ifndef SYSTEM_PARSER_H
-#define SYSTEM_PARSER_H
+#pragma once
 
 #include <fstream>
 #include <regex>
 #include <string>
+
+#include "statistics.h"
 
 namespace LinuxParser {
 // Paths
@@ -53,7 +54,5 @@ std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
-std::vector<long> StatParser(int pid);
-};  // namespace LinuxParser
-
-#endif
+Statistics StatParser(int pid);
+}  // namespace LinuxParser

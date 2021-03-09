@@ -30,6 +30,7 @@ Processor& System::Cpu() { return cpu_; }
 
 vector<Process>& System::Processes() { 
     std::sort(processes_.begin(), processes_.end());
+    std::reverse(processes_.begin(), processes_.end());
     return processes_; 
     }
 

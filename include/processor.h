@@ -1,5 +1,4 @@
-#ifndef PROCESSOR_H
-#define PROCESSOR_H
+#pragma once
 
 class Processor {
  public:
@@ -10,6 +9,5 @@ class Processor {
     long PrevIdle = 0;
 };
 
-#endif
 
 //TODO: very first call not correct: Should I fix this?

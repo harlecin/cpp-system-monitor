@@ -1,5 +1,4 @@
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -26,5 +25,3 @@ class System {
   std::string os_;
   std::string kernel_;
 };
-
-#endif
